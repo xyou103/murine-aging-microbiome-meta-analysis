@@ -1,0 +1,339 @@
+#The following analysis was perfomred on ERISONE cluster 
+#ERISONE website https://rc.partners.org/it-services/computational-resources#erisone-linux-cluster
+
+#Module load for 16s data analysis in qiime2 and picrust2 metagenomic prediction
+module load QIIME2/2018.11
+module use /apps/modulefiles/base
+module load sratoolkit/2.8.2
+module load fastqc/0.11.8
+module load R/3.5.1-foss-2018b
+module load anaconda/4.8.2
+conda create -n picrust2 -c bioconda -c conda-forge picrust2=2.3.0_b
+conda activate picrust2
+
+#Downloading data from SRA and ENA by accessions number 
+
+#Prepare file path files csv format for importing data into qiime
+
+#import data into qiime
+bsub -q short qiime tools import --type 'SampleData[SequencesWithQuality]' --input-path Exp1.csv  --output-path Exp1.qza  --input-format SingleEndFastqManifestPhred33
+
+bsub -q short qiime tools import --type 'SampleData[PairedEndSequencesWithQuality]' --input-path Exp2.csv  --output-path Exp2.qza  --input-format PairedEndFastqManifestPhred33
+
+bsub -q short qiime tools import --type 'SampleData[PairedEndSequencesWithQuality]' --input-path Exp3.csv  --output-path Exp3.qza  --input-format PairedEndFastqManifestPhred33
+
+bsub -q short qiime tools import --type 'SampleData[PairedEndSequencesWithQuality]' --input-path Exp4.csv  --output-path Exp4.qza  --input-format PairedEndFastqManifestPhred33
+
+bsub -q short qiime tools import --type SampleData[SequencesWithQuality] --input-path Exp5_f.csv --output-path Exp5f.qza --input-format SingleEndFastqManifestPhred33
+
+bsub -q short qiime tools import --type 'SampleData[PairedEndSequencesWithQuality]' --input-path Exp6.csv  --output-path Exp6.qza  --input-format PairedEndFastqManifestPhred33
+
+bsub -q short qiime tools import --type 'SampleData[PairedEndSequencesWithQuality]' --input-path Exp7.csv  --output-path Exp7.qza  --input-format PairedEndFastqManifestPhred33
+
+
+#summary of the demultiplexed file results
+bsub -q short qiime demux summarize --i-data Exp1.qza --o-visualization /PHShome/xy090/Female/Exp1/Exp1.demux.qzv
+
+bsub -q short qiime demux summarize --i-data Exp2.qza --o-visualization /PHShome/xy090/Female/Exp2/Exp2.demux.qzv
+
+bsub -q short qiime demux summarize --i-data Exp3.qza --o-visualization /PHShome/xy090/Female/Exp3/Exp3.demux.qzv
+
+bsub -q short qiime demux summarize --i-data Exp4.qza --o-visualization /PHShome/xy090/Male/Exp4/Exp4.demux.qzv
+
+bsub -q short qiime demux summarize --i-data Exp5f.qza --o-visualization /PHShome/xy090/Male/Exp5.2/Exp5f.demux.qzv
+
+bsub -q short qiime demux summarize --i-data Exp6.qza --o-visualization /PHShome/xy090/Male/Exp6/Exp6.demux.qzv
+
+bsub -q short qiime demux summarize --i-data Exp7.qza --o-visualization /PHShome/xy090/Jing-aging-mice/Exp7.demux.qzv
+
+#dada2 denoise
+bsub -q medium qiime dada2 denoise-single --i-demultiplexed-seqs Exp1.qza --p-trunc-len 250 --p-trim-left 16 --o-representative-sequences Exp1.dada2-L250.qza --o-table Exp1-table-dada2-L250.qza --o-denoising-stats Exp1-stats-dada2-L250.qza
+
+bsub -q medium qiime dada2 denoise-paired --i-demultiplexed-seqs Exp2.qza  --p-trim-left-f 16 --p-trim-left-r 16 --p-trunc-len-f 249 --p-trunc-len-r 157  --o-representative-sequences Exp2.dada2.qza --o-table Exp2-table-dada2.qza --o-denoising-stats Exp2-stats-dada2.qza
+
+bsub -q long qiime dada2 denoise-paired --i-demultiplexed-seqs Exp3.qza --p-trim-left-f 16 --p-trim-left-r 16 --p-trunc-len-f 265 --p-trunc-len-r 230  --o-representative-sequences Exp3.dada2.qza --o-table Exp3-table-dada2.qza --o-denoising-stats Exp3-stats-dada2.qza
+
+bsub -q medium qiime dada2 denoise-paired --i-demultiplexed-seqs Exp4.qza --p-trim-left-f 16 --p-trim-left-r 16  --p-trunc-len-f 265 --p-trunc-len-r 215  --o-representative-sequences Exp4.dada2.qza --o-table Exp4-table-dada2.qza --o-denoising-stats Exp4-stats-dada2.qza
+
+bsub -q long qiime dada2 denoise-single --i-demultiplexed-seqs Exp5f.qza --p-trunc-len 287 --p-trim-left 16 --o-representative-sequences Exp5f.dada2.qza --o-table Exp5f-table-dada2.qza --o-denoising-stats Exp5f-stats-dada2.qza
+
+bsub -q long qiime dada2 denoise-paired --i-demultiplexed-seqs Exp6.qza  --p-trim-left-f 16 --p-trim-left-r 16  --p-trunc-len-f 265 --p-trunc-len-r 230  --o-representative-sequences Exp6.dada2.qza --o-table Exp6-table-dada2.qza --o-denoising-stats Exp6-stats-dada2.qza
+
+bsub -q long qiime dada2 denoise-paired --i-demultiplexed-seqs Exp6.qza  --p-trim-left-f 16 --p-trim-left-r 16  --p-trunc-len-f 242 --p-trunc-len-r 150  --o-representative-sequences Exp6.dada2.qza --o-table Exp6-table-dada2.qza --o-denoising-stats Exp6-stats-dada2.qza
+
+
+#prepare metadata for each study
+#stats and table summary after dada2 filtering and trimming
+bsub -q short qiime metadata tabulate --m-input-file Exp1.dada2-L250.qza --o-visualization Exp1-stats-dada2.qzv
+
+bsub -q short qiime feature-table summarize --i-table Exp1-table-dada2-L250.qza --o-visualization Exp1-table-dada2.qzv   --m-sample-metadata-file Exp1.metadata.txt
+
+bsub -q short qiime metadata tabulate --m-input-file Exp2-stats-dada2.qza --o-visualization Exp2-stats-dada2.qzv
+
+bsub -q short qiime feature-table summarize --i-table Exp2-table-dada2.qza --o-visualization Exp2-table-dada2.qzv   --m-sample-metadata-file Exp2.metadata.txt
+
+bsub -q short qiime metadata tabulate --m-input-file Exp3-stats-dada2.qza --o-visualization Exp3-stats-dada2.qzv
+
+bsub -q short qiime feature-table summarize --i-table Exp3-table-dada2.qza --o-visualization Exp3-table-dada2.qzv   --m-sample-metadata-file Exp3.metadata.txt
+
+bsub -q short qiime metadata tabulate --m-input-file Exp4-stats-dada2.qza --o-visualization Exp4-stats-dada2.qzv
+
+bsub -q short qiime feature-table summarize --i-table Exp4-table-dada2.qza --o-visualization Exp4-table-dada2.qzv   --m-sample-metadata-file Exp4.metadata.txt
+
+bsub -q short qiime metadata tabulate --m-input-file Exp5f-stats-dada2.qza --o-visualization Exp5f-stats-dada2.qzv
+
+bsub -q short qiime feature-table summarize --i-table Exp5f-table-dada2.qza --o-visualization Exp5f-table-dada2.qzv   --m-sample-metadata-file Exp5.metadata.txt
+
+bsub -q short qiime metadata tabulate --m-input-file Exp6-stats-dada2.qza --o-visualization Exp6-stats-dada2.qzv
+
+bsub -q short qiime feature-table summarize --i-table Exp6-table-dada2.qza --o-visualization Exp6-table-dada2.qzv   --m-sample-metadata-file Exp6.metadata.txt
+
+bsub -q short qiime metadata tabulate --m-input-file Exp7-stats-dada2.qza --o-visualization Exp7-stats-dada2.qzv
+
+bsub -q short qiime feature-table summarize --i-table Exp7-table-dada2.qza --o-visualization Exp7-table-dada2.qzv   --m-sample-metadata-file Exp7.metadata.txt
+
+
+#import greengenes_database_reference
+bsub -q short "qiime tools import --type 'FeatureData[Sequence]' --input-path 97_otus.fasta --output-path gg_otu_97.qza  --input-format DNAFASTAFormat"
+
+#Exp1 vsearch closed-reference clustering
+bsub -q short "qiime vsearch cluster-features-closed-reference \
+  --i-table Exp1-table-dada2-L250.qza \
+  --i-sequences Exp1.dada2-L250.qza \
+  --i-reference-sequences gg_otu_97.qza \
+  --p-perc-identity 0.97 \
+  --o-clustered-table Exp1-table-97.qza \
+  --o-clustered-sequences Exp1-rep-seqs-97.qza \
+  --o-unmatched-sequences Exp1-unmatched-97.qza"
+
+bsub -q short qiime vsearch uchime-denovo \
+  --i-table Exp1-table-97.qza \
+  --i-sequences Exp1-rep-seqs-97.qza \
+  --output-dir Exp1-rep-seqs-97-uchime
+
+bsub -q short qiime feature-table filter-features \
+  --i-table Exp1-table-97.qza \
+  --m-metadata-file Exp1-rep-seqs-97-uchime/nonchimeras.qza \
+  --o-filtered-table Exp1-table-nonchimeric.qza
+
+bsub -q short qiime feature-table filter-seqs \
+  --i-data Exp1-rep-seqs-97.qza\
+  --m-metadata-file Exp1-rep-seqs-97-uchime/nonchimeras.qza \
+  --o-filtered-data Exp1-rep-seqs-nonchimeric.qza
+
+bsub -q short qiime feature-table summarize \
+  --i-table Exp1-table-nonchimeric.qza \
+  --o-visualization Exp1-table-nonchimeric.qzv
+
+#Exp2 vsearch closed-reference clustering
+bsub -q short "qiime vsearch cluster-features-closed-reference \
+  --i-table Exp2-table-dada2.qza \
+  --i-sequences Exp2.dada2.qza \
+  --i-reference-sequences gg_otu_97.qza \
+  --p-perc-identity 0.97 \
+  --o-clustered-table Exp2-table-97.qza \
+  --o-clustered-sequences Exp2-rep-seqs-97.qza \
+  --o-unmatched-sequences Exp2-unmatched-97.qza"
+
+bsub -q short qiime vsearch uchime-denovo \
+  --i-table Exp2-table-97.qza \
+  --i-sequences Exp2-rep-seqs-97.qza \
+  --output-dir Exp2-rep-seqs-97-uchime
+
+bsub -q short qiime feature-table filter-features \
+  --i-table Exp2-table-97.qza \
+  --m-metadata-file Exp2-rep-seqs-97-uchime/nonchimeras.qza \
+  --o-filtered-table Exp2-table-nonchimeric.qza
+
+bsub -q short qiime feature-table filter-seqs \
+  --i-data Exp2-rep-seqs-97.qza\
+  --m-metadata-file Exp2-rep-seqs-97-uchime/nonchimeras.qza \
+  --o-filtered-data Exp2-rep-seqs-nonchimeric.qza
+
+bsub -q short qiime feature-table summarize \
+  --i-table Exp2-table-nonchimeric.qza \
+  --o-visualization Exp2-table-nonchimeric.qzv
+
+#Exp3 vsearch closed-reference clustering
+bsub -q short "qiime vsearch cluster-features-closed-reference \
+  --i-table Exp3-table-dada2.qza \
+  --i-sequences Exp3.dada2.qza \
+  --i-reference-sequences gg_otu_97.qza \
+  --p-perc-identity 0.97 \
+  --o-clustered-table Exp3-table-97.qza \
+  --o-clustered-sequences Exp3-rep-seqs-97.qza \
+  --o-unmatched-sequences Exp3-unmatched-97.qza"
+
+bsub -q short qiime vsearch uchime-denovo \
+  --i-table Exp3-table-97.qza \
+  --i-sequences Exp3-rep-seqs-97.qza \
+  --output-dir Exp3-rep-seqs-97-uchime
+
+bsub -q short qiime feature-table filter-features \
+  --i-table Exp3-table-97.qza \
+  --m-metadata-file Exp3-rep-seqs-97-uchime/nonchimeras.qza \
+  --o-filtered-table Exp3-table-nonchimeric.qza
+
+bsub -q short qiime feature-table filter-seqs \
+  --i-data Exp3-rep-seqs-97.qza\
+  --m-metadata-file Exp3-rep-seqs-97-uchime/nonchimeras.qza \
+  --o-filtered-data Exp3-rep-seqs-nonchimeric.qza
+
+bsub -q short qiime feature-table summarize \
+  --i-table Exp3-table-nonchimeric.qza \
+  --o-visualization Exp3-table-nonchimeric.qzv
+
+#Exp4 vsearch closed-reference clustering
+
+bsub -q short "qiime vsearch cluster-features-closed-reference \
+  --i-table Exp4-table-dada2.qza \
+  --i-sequences Exp4.dada2.qza \
+  --i-reference-sequences gg_otu_97.qza \
+  --p-perc-identity 0.97 \
+  --o-clustered-table Exp4-table-97.qza \
+  --o-clustered-sequences Exp4-rep-seqs-97.qza \
+  --o-unmatched-sequences Exp4-unmatched-97.qza"
+
+bsub -q short qiime vsearch uchime-denovo \
+  --i-table Exp4-table-97.qza \
+  --i-sequences Exp4-rep-seqs-97.qza \
+  --output-dir Exp4-rep-seqs-97-uchime
+
+bsub -q short qiime feature-table filter-features \
+  --i-table Exp4-table-97.qza \
+  --m-metadata-file Exp4-rep-seqs-97-uchime/nonchimeras.qza \
+  --o-filtered-table Exp4-table-nonchimeric.qza
+
+bsub -q short qiime feature-table filter-seqs \
+  --i-data Exp4-rep-seqs-97.qza\
+  --m-metadata-file Exp4-rep-seqs-97-uchime/nonchimeras.qza \
+  --o-filtered-data Exp4-rep-seqs-nonchimeric.qza
+
+bsub -q short qiime feature-table summarize \
+  --i-table Exp4-table-nonchimeric.qza \
+  --o-visualization Exp4-table-nonchimeric.qzv
+
+#Exp5 vsearch closed-reference clustering
+bsub -q short "qiime vsearch cluster-features-closed-reference \
+  --i-table Exp5f-table-dada2.qza \
+  --i-sequences Exp5f.dada2.qza \
+  --i-reference-sequences gg_otu_97.qza \
+  --p-perc-identity 0.97 \
+  --o-clustered-table Exp5f-table-97.qza \
+  --o-clustered-sequences Exp5f-rep-seqs-97.qza \
+  --o-unmatched-sequences Exp5f-unmatched-97.qza"
+
+bsub -q short qiime vsearch uchime-denovo \
+  --i-table Exp5f-table-97.qza \
+  --i-sequences Exp5f-rep-seqs-97.qza \
+  --output-dir Exp5f-rep-seqs-97-uchime
+
+bsub -q short qiime feature-table filter-features \
+  --i-table Exp5f-table-97.qza \
+  --m-metadata-file Exp5f-rep-seqs-97-uchime/nonchimeras.qza \
+  --o-filtered-table Exp5f-table-nonchimeric.qza
+
+bsub -q short qiime feature-table filter-seqs \
+  --i-data Exp5f-rep-seqs-97.qza\
+  --m-metadata-file Exp5f-rep-seqs-97-uchime/nonchimeras.qza \
+  --o-filtered-data Exp5f-rep-seqs-nonchimeric.qza
+
+bsub -q short qiime feature-table summarize \
+  --i-table Exp5f-table-nonchimeric.qza \
+  --o-visualization Exp5f-table-nonchimeric.qzv
+
+#Exp6 vsearch closed-reference clustering
+bsub -q short "qiime vsearch cluster-features-closed-reference \
+  --i-table Exp6-table-dada2.qza \
+  --i-sequences Exp6.dada2.qza \
+  --i-reference-sequences gg_otu_97.qza \
+  --p-perc-identity 0.97 \
+  --o-clustered-table Exp6-table-97.qza \
+  --o-clustered-sequences Exp6-rep-seqs-97.qza \
+  --o-unmatched-sequences Exp6-unmatched-97.qza"
+
+bsub -q short qiime vsearch uchime-denovo \
+  --i-table Exp6-table-97.qza \
+  --i-sequences Exp6-rep-seqs-97.qza \
+  --output-dir Exp6-rep-seqs-97-uchime
+
+bsub -q short qiime feature-table filter-features \
+  --i-table Exp6-table-97.qza \
+  --m-metadata-file Exp6-rep-seqs-97-uchime/nonchimeras.qza \
+  --o-filtered-table Exp6-table-nonchimeric.qza
+
+bsub -q short qiime feature-table filter-seqs \
+  --i-data Exp6-rep-seqs-97.qza\
+  --m-metadata-file Exp6-rep-seqs-97-uchime/nonchimeras.qza \
+  --o-filtered-data Exp6-rep-seqs-nonchimeric.qza
+
+bsub -q short qiime feature-table summarize \
+  --i-table Exp6-table-nonchimeric.qza \
+  --o-visualization Exp6-table-nonchimeric.qzv
+
+#Exp7 vsearch closed-reference clustering
+bsub -q short "qiime vsearch cluster-features-closed-reference \
+  --i-table Exp7-table-dada2.qza \
+  --i-sequences Exp7.dada2.qza \
+  --i-reference-sequences gg_otu_97.qza \
+  --p-perc-identity 0.97 \
+  --o-clustered-table Exp7-table-97.qza \
+  --o-clustered-sequences Exp7-rep-seqs-97.qza \
+  --o-unmatched-sequences Exp7-unmatched-97.qza"
+
+bsub -q short qiime vsearch uchime-denovo \
+  --i-table Exp7-table-97.qza \
+  --i-sequences Exp7-rep-seqs-97.qza \
+  --output-dir Exp7-rep-seqs-97-uchime
+
+bsub -q short qiime feature-table filter-features \
+  --i-table Exp7-table-97.qza \
+  --m-metadata-file Exp7-rep-seqs-97-uchime/nonchimeras.qza \
+  --o-filtered-table Exp7-table-nonchimeric.qza
+
+bsub -q short qiime feature-table filter-seqs \
+  --i-data Exp7-rep-seqs-97.qza\
+  --m-metadata-file Exp7-rep-seqs-97-uchime/nonchimeras.qza \
+  --o-filtered-data Exp7-rep-seqs-nonchimeric.qza
+
+bsub -q short qiime feature-table summarize \
+  --i-table Exp7-table-nonchimeric.qza \
+  --o-visualization Exp7-table-nonchimeric.qzv
+
+#picrust2 prediction
+#extrct feature-table.biom from table-non-chimeric.qza and representative.fasta from rep-seqs-nonchimeric.qza
+#picrust unstratified output
+bsub -q big -v 32000 -R rusage[mem=32000]  picrust2_pipeline.py -s Exp1-dna-sequences.fasta -i Exp1-feature-table.biom -o Exp1-picrust2-unstrat -p 4
+
+bsub -q big -v 32000 -R rusage[mem=32000]  picrust2_pipeline.py -s Exp2-dna-sequences.fasta -i Exp2-feature-table.biom -o Exp2-picrust2-unstrat -p 4
+
+bsub -q big -v 32000 -R rusage[mem=32000]  picrust2_pipeline.py -s Exp3-dna-sequences.fasta -i Exp3-feature-table.biom -o Exp3-picrust2-unstrat -p 4
+
+bsub -q big -v 32000 -R rusage[mem=32000]  picrust2_pipeline.py -s Exp4-dna-sequences.fasta -i Exp4-feature-table.biom -o Exp4-picrust2-unstrat -p 4
+
+bsub -q big -v 32000 -R rusage[mem=32000]  picrust2_pipeline.py -s Exp5-dna-sequences.fasta -i Exp5-feature-table.biom -o Exp5-picrust2-unstrat -p 4
+
+bsub -q big -v 64000 -R rusage[mem=32000]  picrust2_pipeline.py -s Exp6-dna-sequences.fasta -i Exp6-feature-table.biom -o Exp6-picrust2-unstrat -p 4
+
+bsub -q big -v 64000 -R rusage[mem=32000]  picrust2_pipeline.py -s Exp7-dna-sequences.fasta -i Exp7-feature-table.biom -o Exp7-picrust2-unstrat -p 4
+
+
+#add description PW
+bsub -q short add_descriptions.py -i Exp1-picrust2-unstrat/pathways_out/path_abun_unstrat.tsv.gz -m METACYC  -o Exp1-PW.tsv.gz
+
+bsub -q short add_descriptions.py -i Exp2_97/Exp2-picrust2-unstrat/pathways_out/path_abun_unstrat.tsv.gz -m METACYC  -o Exp2-PW.tsv.gz
+
+bsub -q short add_descriptions.py -i Exp3_97/Exp3-picrust2-unstrat/pathways_out/path_abun_unstrat.tsv.gz -m METACYC  -o Exp3-PW.tsv.gz
+
+bsub -q short add_descriptions.py -i Exp4_97/Exp4-picrust2-unstrat/pathways_out/path_abun_unstrat.tsv.gz -m METACYC  -o Exp4-PW.tsv.gz
+
+bsub -q short add_descriptions.py -i Exp5-picrust2-unstrat/pathways_out/path_abun_unstrat.tsv.gz -m METACYC  -o Exp5-PW.tsv.gz
+
+bsub -q short add_descriptions.py -i Exp6_97/Exp6-picrust2-unstrat/pathways_out/path_abun_unstrat.tsv.gz -m METACYC  -o Exp6-PW.tsv.gz
+
+bsub -q short add_descriptions.py -i Exp7-picrust2-unstrat/pathways_out/path_abun_unstrat.tsv.gz -m METACYC  -o Exp7-PW.tsv.gz
+
+
+
+
+
