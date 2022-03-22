@@ -1,0 +1,100 @@
+#The following analysis was perfomred on ERISONE cluster
+
+#module load for 16s data analysis in qiime2 and picrust2 metagenomic prediction
+module load QIIME2/2018.11
+module use /apps/modulefiles/base
+module load sratoolkit/2.8.2
+module load fastqc/0.11.8
+module load R/3.5.1-foss-2018b
+module load anaconda/4.8.2
+conda activate sortmerna
+
+#sortmerna filtering 
+
+bsub -q normal sortmerna -ref 97_otus.fasta -reads NO01_paired_1.fastq.gz -reads NO01_paired_2.fastq.gz -workdir ~/B6-aging-metagenomic/filtered_old/NO01/ -aligned NO01 -fastx -out2 -idx-dir ~/B6-aging-metagenomic/filtered_old/db_index/
+
+bsub -q normal sortmerna -ref 97_otus.fasta -reads NO02_paired_1.fastq.gz -reads NO02_paired_2.fastq.gz -workdir ~/B6-aging-metagenomic/filtered_old/NO02/ -fastx -out2 -idx-dir ~/B6-aging-metagenomic/filtered_old/db_index/
+
+bsub -q normal sortmerna -ref 97_otus.fasta -reads NO03_paired_1.fastq.gz -reads NO03_paired_2.fastq.gz -workdir ~/B6-aging-metagenomic/filtered_old/NO03/ -aligned NO03 -fastx -out2 -idx-dir ~/B6-aging-metagenomic/filtered_old/db_index/
+
+bsub -q normal sortmerna -ref 97_otus.fasta -reads NO04_paired_1.fastq.gz -reads NO04_paired_2.fastq.gz -workdir ~/B6-aging-metagenomic/filtered_old/NO04/ -aligned NO04 -fastx -out2 -idx-dir ~/B6-aging-metagenomic/filtered_old/db_index/
+
+bsub -q normal sortmerna -ref 97_otus.fasta -reads NO05_paired_1.fastq.gz -reads NO05_paired_2.fastq.gz -workdir ~/B6-aging-metagenomic/filtered_old/NO05/ -aligned NO05 -fastx -out2 -idx-dir ~/B6-aging-metagenomic/filtered_old/db_index/
+
+bsub -q normal sortmerna -ref 97_otus.fasta -reads NO06_paired_1.fastq.gz -reads NO06_paired_2.fastq.gz -workdir ~/B6-aging-metagenomic/filtered_old/NO06/ -aligned NO06 -fastx -out2 -idx-dir ~/B6-aging-metagenomic/filtered_old/db_index/
+
+bsub -q normal sortmerna -ref 97_otus.fasta -reads NO07_paired_1.fastq.gz -reads NO07_paired_2.fastq.gz -workdir ~/B6-aging-metagenomic/filtered_old/NO07/ -aligned NO07 -fastx -out2 -idx-dir ~/B6-aging-metagenomic/filtered_old/db_index/
+
+bsub -q normal sortmerna -ref 97_otus.fasta -reads NO08_paired_1.fastq.gz -reads NO08_paired_2.fastq.gz -workdir ~/B6-aging-metagenomic/filtered_old/NO08/ -aligned NO08 -fastx -out2 -idx-dir ~/B6-aging-metagenomic/filtered_old/db_index/
+
+bsub -q normal sortmerna -ref 97_otus.fasta -reads NO09_paired_1.fastq.gz -reads NO09_paired_2.fastq.gz -workdir ~/B6-aging-metagenomic/filtered_old/NO09/ -aligned NO09 -fastx -out2 -idx-dir ~/B6-aging-metagenomic/filtered_old/db_index/
+
+bsub -q normal sortmerna -ref 97_otus.fasta -reads NO10_paired_1.fastq.gz -reads NO10_paired_2.fastq.gz -workdir ~/B6-aging-metagenomic/filtered_old/NO10/ -aligned NO10 -fastx -out2 -idx-dir ~/B6-aging-metagenomic/filtered_old/db_index/
+
+bsub -q normal sortmerna -ref 97_otus.fasta -reads NY01_paired_1.fastq.gz -reads NY01_paired_2.fastq.gz -workdir ~/B6-aging-metagenomic/filtered_young/NY01/ -aligned NY01 -fastx -out2 -idx-dir ~/B6-aging-metagenomic/filtered_old/db_index/
+
+bsub -q normal sortmerna -ref 97_otus.fasta -reads NY02_paired_1.fastq.gz -reads NY02_paired_2.fastq.gz -workdir ~/B6-aging-metagenomic/filtered_young/NY02/ -aligned NY02 -fastx -out2 -idx-dir ~/B6-aging-metagenomic/filtered_old/db_index/
+
+bsub -q normal sortmerna -ref 97_otus.fasta -reads NY03_paired_1.fastq.gz -reads NY03_paired_2.fastq.gz -workdir ~/B6-aging-metagenomic/filtered_young/NY03/ -aligned NY03 -fastx -out2 -idx-dir ~/B6-aging-metagenomic/filtered_old/db_index/
+
+bsub -q normal sortmerna -ref 97_otus.fasta -reads NY04_paired_1.fastq.gz -reads NY04_paired_2.fastq.gz -workdir ~/B6-aging-metagenomic/filtered_young/NY04/ -aligned NY04 -fastx -out2 -idx-dir ~/B6-aging-metagenomic/filtered_old/db_index/
+
+bsub -q normal sortmerna -ref 97_otus.fasta -reads NY05_paired_1.fastq.gz -reads NY05_paired_2.fastq.gz -workdir ~/B6-aging-metagenomic/filtered_young/NY05/ -aligned NY05 -fastx -out2 -idx-dir ~/B6-aging-metagenomic/filtered_old/db_index/
+
+bsub -q normal sortmerna -ref 97_otus.fasta -reads NY06_paired_1.fastq.gz -reads NY06_paired_2.fastq.gz -workdir ~/B6-aging-metagenomic/filtered_young/NY06/ -aligned NY06 -fastx -out2 -idx-dir ~/B6-aging-metagenomic/filtered_old/db_index/
+
+bsub -q normal sortmerna -ref 97_otus.fasta -reads NY07_paired_1.fastq.gz -reads NY07_paired_2.fastq.gz -workdir ~/B6-aging-metagenomic/filtered_young/NY07/ -aligned NY07 -fastx -out2 -idx-dir ~/B6-aging-metagenomic/filtered_old/db_index/
+
+bsub -q normal sortmerna -ref 97_otus.fasta -reads NY08_paired_1.fastq.gz -reads NY08_paired_2.fastq.gz -workdir ~/B6-aging-metagenomic/filtered_young/NY08/ -aligned NY08 -fastx -out2 -idx-dir ~/B6-aging-metagenomic/filtered_old/db_index/
+
+bsub -q normal sortmerna -ref 97_otus.fasta -reads NY09_paired_1.fastq.gz -reads NY09_paired_2.fastq.gz -workdir ~/B6-aging-metagenomic/filtered_young/NY09/ -aligned NY09 -fastx -out2 -idx-dir ~/B6-aging-metagenomic/filtered_old/db_index/
+
+bsub -q normal sortmerna -ref 97_otus.fasta -reads NY10_paired_1.fastq.gz -reads NY10_paired_2.fastq.gz -workdir ~/B6-aging-metagenomic/filtered_young/NY10/ -aligned NY10 -fastx -out2 -idx-dir ~/B6-aging-metagenomic/filtered_old/db_index/
+
+#whole metagenome analysis closed-reference OTU picking up
+#import data to qiime2
+bsub -q short qiime tools import --type 'SampleData[SequencesWithQuality]' --input-path ./meta.csv --output-path meta.qza --input-format SingleEndFastqManifestPhred33
+
+#OTU vsearch dereplicate
+bsub -q short qiime vsearch dereplicate-sequences \
+  --i-sequences meta.qza \
+  --o-dereplicated-table meta.table.qza \
+  --o-dereplicated-sequences meta.rep-seqs.qza
+
+bsub -q short "qiime vsearch cluster-features-closed-reference \
+  --i-table meta.table.qza \
+  --i-sequences meta.rep-seqs.qza \
+  --i-reference-sequences gg_otu_97.qza \
+  --p-perc-identity 0.97 \
+  --o-clustered-table meta-table-97.qza \
+  --o-clustered-sequences meta-rep-seqs-97.qza \
+  --o-unmatched-sequences meta-unmatched-97.qza"
+
+bsub -q short qiime vsearch uchime-denovo \
+  --i-table meta-table-97.qza \
+  --i-sequences meta-rep-seqs-97.qza \
+  --output-dir meta-rep-seqs-97-uchime
+
+bsub -q short qiime feature-table filter-features \
+  --i-table meta-table-97.qza \
+  --m-metadata-file meta-rep-seqs-97-uchime/nonchimeras.qza \
+  --o-filtered-table meta-table-nonchimeric.qza
+
+bsub -q short qiime feature-table filter-seqs \
+  --i-data meta-rep-seqs-97.qza\
+  --m-metadata-file meta-rep-seqs-97-uchime/nonchimeras.qza \
+  --o-filtered-data meta-rep-seqs-nonchimeric.qza
+
+bsub -q short qiime feature-table summarize \
+  --i-table meta-table-nonchimeric.qza \
+  --o-visualization meta-table-nonchimeric.qzv
+
+#convert biom table to OTU txt table
+biom convert -i meta-feature-table.biom -o meta-table.txt --to-tsv
+
+
+
+
+
+
+
