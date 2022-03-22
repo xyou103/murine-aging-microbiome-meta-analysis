@@ -1,0 +1,11 @@
+sample-id,absolute-filepath,direction
+Y1,/PHShome/xy090/Female/Exp1/Y1.fastq,forward
+Y2,/PHShome/xy090/Female/Exp1/Y2.fastq,forward
+Y3,/PHShome/xy090/Female/Exp1/Y3.fastq,forward
+Y4,/PHShome/xy090/Female/Exp1/Y4.fastq,forward
+Y5,/PHShome/xy090//Female/Exp1/Y5.fastq,forward
+O1,/PHShome/xy090//Female/Exp1/O1.fastq,forward
+O2,/PHShome/xy090//Female/Exp1/O2.fastq,forward
+O3,/PHShome/xy090//Female/Exp1/O3.fastq,forward
+O4,/PHShome/xy090//Female/Exp1/O4.fastq,forward
+O5,/PHShome/xy090//Female/Exp1/O5.fastq,forward
