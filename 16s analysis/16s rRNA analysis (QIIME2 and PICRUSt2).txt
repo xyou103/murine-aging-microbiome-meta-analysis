@@ -24,7 +24,7 @@ bsub -q short qiime tools import --type 'SampleData[PairedEndSequencesWithQualit
 
 bsub -q short qiime tools import --type 'SampleData[PairedEndSequencesWithQuality]' --input-path Exp4.csv  --output-path Exp4.qza  --input-format PairedEndFastqManifestPhred33
 
-bsub -q short qiime tools import --type SampleData[SequencesWithQuality] --input-path Exp5_f.csv --output-path Exp5f.qza --input-format SingleEndFastqManifestPhred33
+bsub -q short qiime tools import --type SampleData[SequencesWithQuality] --input-path Exp5.csv --output-path Exp5f.qza --input-format SingleEndFastqManifestPhred33
 
 bsub -q short qiime tools import --type 'SampleData[PairedEndSequencesWithQuality]' --input-path Exp6.csv  --output-path Exp6.qza  --input-format PairedEndFastqManifestPhred33
 
@@ -59,7 +59,7 @@ bsub -q long qiime dada2 denoise-single --i-demultiplexed-seqs Exp5f.qza --p-tru
 
 bsub -q long qiime dada2 denoise-paired --i-demultiplexed-seqs Exp6.qza  --p-trim-left-f 16 --p-trim-left-r 16  --p-trunc-len-f 265 --p-trunc-len-r 230  --o-representative-sequences Exp6.dada2.qza --o-table Exp6-table-dada2.qza --o-denoising-stats Exp6-stats-dada2.qza
 
-bsub -q long qiime dada2 denoise-paired --i-demultiplexed-seqs Exp6.qza  --p-trim-left-f 16 --p-trim-left-r 16  --p-trunc-len-f 242 --p-trunc-len-r 150  --o-representative-sequences Exp6.dada2.qza --o-table Exp6-table-dada2.qza --o-denoising-stats Exp6-stats-dada2.qza
+bsub -q long qiime qiime dada2 denoise-paired --i-demultiplexed-seqs Exp7.qza --p-trim-left-f 16 --p-trim-left-r 16 --p-trunc-len-f 242 --p-trunc-len-r 150 --o-representative-sequences Exp7.dada2.qza --o-table Exp7-table-dada2.qza --o-denoising-stats Exp7-stats-dada2.qza
 
 
 #prepare metadata for each study
