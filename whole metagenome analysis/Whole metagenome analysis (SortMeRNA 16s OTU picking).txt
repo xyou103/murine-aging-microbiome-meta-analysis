@@ -1,6 +1,6 @@
 #The following analysis was perfomred on ERISONE cluster
 
-#module load for 16s data analysis in qiime2 and picrust2 metagenomic prediction
+#module load
 module load QIIME2/2018.11
 module use /apps/modulefiles/base
 module load sratoolkit/2.8.2
